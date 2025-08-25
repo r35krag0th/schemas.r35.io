@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Schemas - r35 Network</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #326ce5 0%, #4285f4 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0 0 1rem 0;
+            font-size: 3rem;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .version-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .version-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #326ce5;
+        }
+        
+        .version-card h2 {
+            margin: 0 0 1rem 0;
+            font-size: 1.8rem;
+            color: #326ce5;
+            font-weight: 600;
+        }
+        
+        .version-card .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .version-card .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .version-card .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+        }
+        
+        .version-card .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.2rem;
+        }
+        
+        .version-card .browse-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #326ce5 0%, #4285f4 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        .version-card .browse-link:hover {
+            background: linear-gradient(135deg, #1557b0 0%, #1c4587 100%);
+            transform: translateY(-1px);
+        }
+        
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-section h3 {
+            margin: 0 0 1rem 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .info-section p {
+            margin: 0 0 1rem 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .info-section code {
+            background: #f1f3f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+        
+        .footer a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .version-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .version-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Kubernetes Schemas</h1>
+        <p>Comprehensive JSON schemas for Kubernetes API resources</p>
+    </div>
+    
+    <a href="../" class="back-link">← Back to r35 Network Schemas</a>
+    
+    <div class="info-section">
+        <h3>About Kubernetes Schemas</h3>
+        <p>
+            These JSON schemas provide validation and autocomplete support for Kubernetes YAML manifests. 
+            Each version contains schemas for all Kubernetes API resources, organized by API group and version.
+        </p>
+        <p>
+            Schemas are sourced from <a href="https://github.com/yannh/kubernetes-json-schema" target="_blank">yannh/kubernetes-json-schema</a> 
+            and automatically updated to include the latest patch version for each major.minor Kubernetes release.
+        </p>
+        <p>
+            <strong>Usage:</strong> Add <code># yaml-language-server: $schema=https://schemas.r35.network/kubernetes/VERSION/RESOURCE.json</code> 
+            to the top of your YAML files for editor validation and autocomplete.
+        </p>
+    </div>
+    
+    <div class="version-grid">
+
+        <div class="version-card">
+            <h2>Kubernetes 1.33</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">578</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">26</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.33/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.32</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">565</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">26</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.32/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.31</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">558</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">26</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.31/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.30</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">551</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">26</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.30/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.29</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">518</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.29/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.28</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">511</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.28/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.27</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">508</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.27/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.26</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">494</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.26/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.25</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">454</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.25/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.24</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">461</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.24/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.23</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">461</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.23/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.22</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">457</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.22/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.21</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">466</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.21/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.20</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">460</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.20/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+        <div class="version-card">
+            <h2>Kubernetes 1.19</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">452</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">API Groups</div>
+                </div>
+            </div>
+            <a href="1.19/" class="browse-link">Browse Schemas →</a>
+        </div>
+
+    </div>
+    
+    <div class="footer">
+        <p>
+            Part of <a href="https://schemas.r35.network">r35 Network Schemas</a> | 
+            <a href="https://github.com/yannh/kubernetes-json-schema" target="_blank">Original Source</a>
+        </p>
+    </div>
+</body>
+</html>

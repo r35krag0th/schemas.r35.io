@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cdn.r35.network/schemas/terraform-module.json",
+  "title": "r35: Terraform Module Metadata",
+  "description": "Metadata about Terraform Module for r35 Networks",
+  "type": "object",
+  "required": [
+    "provider_name",
+    "module_name"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "provider_name": {
+      "description": "Name of the Terraform provider this module is for.",
+      "type": "string",
+      "pattern": "^[a-z]+$",
+      "examples": [
+        "aws",
+        "google",
+        "azure"
+      ]
+    },
+    "module_name": {
+      "description": "Name of the Terraform module.",
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "examples": [
+        "user",
+        "iam-policy"
+      ]
+    },
+    "template": {
+      "description": "Template used to create this module.",
+      "type": "object",
+      "required": [
+        "repository",
+        "version"
+      ],
+      "properties": {
+        "repository": {
+          "description": "URL of the template repository used to create this module.",
+          "type": "string",
+          "pattern": "^https://github\\.com/r35-Networks/[A-Za-z0-9_.-]+$"
+        },
+        "version": {
+          "descripton": "Version of the template repo last pulled to create the contents of this repo.",
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "examples": [
+            "0.1.2",
+            "1.0.0",
+            "9.9.9"
+          ]
+        }
+      }
+    }
+  }
+}
